@@ -44,7 +44,7 @@ class QuestionAPI(APIView):
                     answer_list = question.answer.all()
                     answer_image_list = []
                     for answer_list in answer_list:
-                        answer_image_list.append(answer_list.image_dirs.url)
+                        answer_image_list.append({"url": answer_list.image_dirs.url, "pk": answer_list.pk})
                     question_list.append(dict(question=question.pk,
                                               contents=question.contents,
                                               answer_list=answer_image_list))
@@ -74,7 +74,7 @@ class ImageAPI(APIView):
         for answer in answer_list:
             Diary.objects.create(user=user,
                                  type='image',
-                                 answer=Answer.objects.get(image_dirs=answer))
+                                 answer=Answer.objects.get(pk=answer))
         return Response(dict(result='Success'))
 
 class HistoryAPI(APIView):
