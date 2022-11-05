@@ -116,7 +116,14 @@ class HistoryAPI(APIView):
                 except:
                     image_list[date_category] = [image_data]
                     # print(image_list[date_category])
-            return Response(image_list)
+            image_result = []
+            image_list = dict(sorted(image_list.items()))
+            for k, v in image_list.items():
+                s = k.split('/')
+                image_result.append(dict(date=s[0],
+                                         category=s[1],
+                                         image_list=v))
+            return Response(image_result)
 
 
 
