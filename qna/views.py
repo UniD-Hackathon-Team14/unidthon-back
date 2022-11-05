@@ -11,11 +11,13 @@ from .serializers import DiarySerializer
 
 
 class CategoryAPI(APIView):
+    @csrf_exempt
     def get(self, request, **kwargs):
         categories_list = Category.objects.values('pk', 'title', 'description')
         return Response(categories_list)
 
 class QuestionAPI(APIView):
+    @csrf_exempt
     def get(self, request, **kwargs):
         category = request.GET.get("category")
         type = request.GET.get("type")
@@ -55,10 +57,9 @@ class QuestionAPI(APIView):
 
 
 class AudioAPI(APIView):
+    @csrf_exempt
     def post(self, request):
         data = request.data
-        user = request.user.pk
-        data['user'] = user
         data['type'] = 'audio'
         serializer = DiarySerializer(data=data)
         if serializer.is_valid():
@@ -68,8 +69,9 @@ class AudioAPI(APIView):
             raise exceptions.ParseError("Not Created")
 
 class ImageAPI(APIView):
+    @csrf_exempt
     def post(self, request):
-        user = request.user
+        user = User.objects.get(pk=request.data['user'])
         answer_list = request.data['answers']
         for answer in answer_list:
             Diary.objects.create(user=user,
@@ -80,7 +82,7 @@ class ImageAPI(APIView):
 class HistoryAPI(APIView):
     @csrf_exempt
     def get(self, request):
-        user = User.objects.get(pk=1)
+        user = User.objects.get(pk=request.data['user'])
         category = request.GET.get("category")
         type = request.GET.get("type")
         # 카테고리가 있는 경우
