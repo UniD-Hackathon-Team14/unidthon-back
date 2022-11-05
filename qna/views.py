@@ -83,9 +83,9 @@ class HistoryAPI(APIView):
         # 카테고리가 있는 경우
         if (category):
             if (type == 'audio'):
-                diary_queryset = user.diary.filter(type=type, question__category__pk=category)
+                diary_queryset = user.diary.filter(type=type, question__category__title=category)
             else:
-                diary_queryset = user.diary.filter(type=type, answer__question__category__pk=category)
+                diary_queryset = user.diary.filter(type=type, answer__question__category__title=category)
         else :
             diary_queryset = user.diary.filter(type=type)
 
