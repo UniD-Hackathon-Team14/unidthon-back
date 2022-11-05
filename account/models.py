@@ -32,7 +32,7 @@ class User(AbstractUser):
 
     username = models.CharField(max_length=10, unique=True)
     password = models.CharField('비밀번호', max_length=200)
-    nickname = models.CharField(max_length=20, unique=True)
+    nickname = models.CharField(max_length=20)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomAccountManager()

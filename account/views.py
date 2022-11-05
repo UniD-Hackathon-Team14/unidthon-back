@@ -23,8 +23,6 @@ class RegisterAPI(APIView):
         data = request.data
         if User.objects.filter(username=data["username"]).exists():
             return Response("Username already exists", status.HTTP_400_BAD_REQUEST)
-        if User.objects.filter(nickname=data["nickname"]).exists():
-            return Response("Username already exists", status.HTTP_400_BAD_REQUEST)
         user = User.objects.create(username=data["username"], nickname=data["nickname"])
         user.set_password(data["password"])
         user.save()
@@ -32,4 +30,7 @@ class RegisterAPI(APIView):
 
 class CheckUsernameAPI(APIView):
     def get(self, request, **kwargs):
-        pass
+        username = request.GET.get('username')
+        if User.objects.filter(username=username).exists():
+            return Response("Username already exists", status.HTTP_400_BAD_REQUEST)
+        return Response("Username valid", status.HTTP_200_OK)
