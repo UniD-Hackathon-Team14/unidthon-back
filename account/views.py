@@ -9,7 +9,8 @@ from .models import User
 class ProfileAPI(APIView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, **kwargs):
-        user = request.user
+        user = request.GET.get("user")
+        user = User.objects.get(pk=user)
         if user.is_authenticated:
             return Response({"username": user.username, "nickname": user.nickname}, status=status.HTTP_200_OK)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
