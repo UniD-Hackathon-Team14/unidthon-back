@@ -35,7 +35,7 @@ class QuestionAPI(APIView):
                     question_list = random.sample(range(question_queryset.count()), 3)
                     question_result = Question.objects.none()
                     for question_id in question_list:
-                        question_result |= Question.objects.filter(pk=question_id)
+                        question_result |= Question.objects.filter(pk=question_queryset[question_id].pk)
                     question_queryset = question_result
                 question_list = []
                 for question in question_queryset:
