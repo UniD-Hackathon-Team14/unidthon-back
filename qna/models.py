@@ -17,6 +17,16 @@ def uuid_name(instance, filename):
         str(name)+extension,
     ])
 
+def uuid_audio(instance, filename):
+    name = uuid.uuid4()
+    extension = os.path.splitext(filename)[-1].lower()
+    return '/'.join([
+        'media',
+        'audio',
+        str(name)+extension,
+    ])
+
+
 class Category(models.Model):
     title = models.CharField('카테고리', max_length=10)
     description = models.TextField('설명', blank=True)
@@ -47,18 +57,17 @@ class Answer(models.Model):
     class Meta:
         verbose_name_plural = "응답"
 
-    def __str__(self):
-        return self.question
-
 class Diary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='질문', on_delete=models.CASCADE, related_name="diary")
     type = models.CharField('타입', max_length=32, choices=AnswerType.TYPE.value,
                               default=AnswerType.IMAGE.value)
-    answer = models.ForeignKey(Answer, verbose_name='응답', on_delete=models.CASCADE, related_name="diary")
+    question = models.ForeignKey(Question, verbose_name='질문', on_delete=models.CASCADE, related_name="diary", blank=True, null=True)
+    answer = models.ForeignKey(Answer, verbose_name='응답', on_delete=models.CASCADE, related_name="diary", blank=True, null=True)
+    audio_dirs = models.FileField(upload_to=uuid_audio, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name_plural = "다이어리"
 
     def __str__(self):
-        return self.user + self.type
+        return self.user.username + self.type
