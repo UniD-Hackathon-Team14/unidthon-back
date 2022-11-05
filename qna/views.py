@@ -75,4 +75,32 @@ class ImageAPI(APIView):
                                  answer=Answer.objects.get(pk=answer))
         return Response(dict(result='Success'))
 
+class HistoryAPI(APIView):
+    def get(self, request):
+        user = request.user
+        category = request.GET.get("category")
+        type = request.GET.get("type")
+        # 카테고리가 있는 경우
+        if (category):
+            if (type == 'audio'):
+                print(user.diary.all())
+                diary_queryset = user.diary.filter(type=type, question__category__pk=category)
+                print(diary_queryset)
+            else:
+                diary_queryset = user.diary.filter(type=type, answer__category__pk=category)
+        else :
+            diary_queryset = user.diary.filter(type=type)
+
+        # 음성인 경우 바로 리스트를 바로 return
+        if (type == 'audio'):
+            audio_list = []
+            for diary in diary_queryset:
+                audio_list.append(dict(question=diary.question.contents,
+                                       audio=diary.audio_dirs.url,
+                                       created_at=diary.created_at))
+            return Response(dict(nickname=user.nickname,
+                                 audio_list=audio_list))
+
+
+
 

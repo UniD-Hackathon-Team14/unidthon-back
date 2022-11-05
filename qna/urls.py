@@ -7,4 +7,5 @@ urlpatterns = [
     path("question/", QuestionAPI.as_view(), name="question_api"),
     path('answer/audio/', AudioAPI.as_view(), name='audio_api'),
     path('answer/image/', ImageAPI.as_view(), name='image_api'),
+    path('history/', HistoryAPI.as_view(), name='history_api'),
 ]
