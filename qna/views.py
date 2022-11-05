@@ -85,7 +85,7 @@ class HistoryAPI(APIView):
             if (type == 'audio'):
                 diary_queryset = user.diary.filter(type=type, question__category__pk=category)
             else:
-                diary_queryset = user.diary.filter(type=type, answer__category__pk=category)
+                diary_queryset = user.diary.filter(type=type, answer__question__category__pk=category)
         else :
             diary_queryset = user.diary.filter(type=type)
 
@@ -99,6 +99,21 @@ class HistoryAPI(APIView):
             return Response(dict(nickname=user.nickname,
                                  audio_list=audio_list))
 
+        if (type == 'image'):
+            image_list = {}
+            for diary in diary_queryset:
+                date = diary.created_at.strftime("%Y-%m-%d")
+                category = diary.answer.question.category.title
+                date_category = str(date) + '/' + str(category)
+                image_data = dict(question=diary.answer.question.contents,
+                                  image=diary.answer.image_dirs.url)
+                try:
+                    image_list[date_category] = image_list[date_category] + [image_data]
+                    # print(image_list[date_category])
+                except:
+                    image_list[date_category] = [image_data]
+                    # print(image_list[date_category])
+            return Response(image_list)
 
 
 
