@@ -74,7 +74,7 @@ class ImageAPI(APIView):
         for answer in answer_list:
             Diary.objects.create(user=user,
                                  type='image',
-                                 answer=Answer.objects.get(pk=answer))
+                                 answer=Answer.objects.get(image_dirs=answer))
         return Response(dict(result='Success'))
 
 class HistoryAPI(APIView):
