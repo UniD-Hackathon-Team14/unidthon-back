@@ -1,8 +1,18 @@
 from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
+
+class ProfileAPI(APIView):
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, **kwargs):
+        user = request.user
+        if user.is_authenticated:
+            return Response({"username": user.username, "nickname": user.nickname}, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 class LoginAPI(APIView):
     def post(self, request, **kwargs):
