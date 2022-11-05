@@ -82,7 +82,7 @@ class ImageAPI(APIView):
 class HistoryAPI(APIView):
     @csrf_exempt
     def get(self, request):
-        user = User.objects.get(pk=request.data['user'])
+        user = User.objects.get(pk=request.GET.get("user"))
         category = request.GET.get("category")
         type = request.GET.get("type")
         # 카테고리가 있는 경우
