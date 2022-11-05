@@ -21,14 +21,32 @@ class Category(models.Model):
     title = models.CharField('카테고리', max_length=10)
     description = models.TextField('설명', blank=True)
 
+    class Meta:
+        verbose_name_plural = "카테고리"
+
+    def __str__(self):
+        return self.title
+
 class Question(models.Model):
     category = models.ForeignKey(Category, verbose_name='카테고리', on_delete=models.CASCADE)
     contents = models.TextField('질문')
     created_at = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name_plural = "질문"
+
+    def __str__(self):
+        return self.contents
+
 class Answer(models.Model):
     question = models.ForeignKey(Question, verbose_name='질문', on_delete=models.CASCADE)
     image_dirs = models.ImageField(upload_to=uuid_name, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "응답"
+
+    def __str__(self):
+        return self.question
 
 class Diary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='질문', on_delete=models.CASCADE)
@@ -36,3 +54,9 @@ class Diary(models.Model):
                               default=AnswerType.IMAGE.value)
     answer = models.ForeignKey(Answer, verbose_name='응답', on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name_plural = "다이어리"
+
+    def __str__(self):
+        return self.user + self.type
