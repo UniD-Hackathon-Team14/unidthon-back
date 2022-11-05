@@ -19,7 +19,7 @@ class QuestionAPI(APIView):
         type = request.GET.get("type")
         if category:
             try:
-                question_queryset = Question.objects.filter(category__pk=category, type=type)
+                question_queryset = Question.objects.filter(category__title=category, type=type)
                 # user 가 있는 경우 필터링
             except Question.DoesNotExist:
                 raise exceptions.ParseError("No question found")
