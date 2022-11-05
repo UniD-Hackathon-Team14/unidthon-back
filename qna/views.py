@@ -55,6 +55,8 @@ class QuestionAPI(APIView):
 class AudioAPI(APIView):
     def post(self, request):
         data = request.data
+        user = request.user.pk
+        data['user'] = user
         data['type'] = 'audio'
         serializer = DiarySerializer(data=data)
         if serializer.is_valid():
@@ -62,3 +64,6 @@ class AudioAPI(APIView):
             return Response(dict(result='Success'))
         else:
             raise exceptions.ParseError("Not Created")
+
+# class ImageAPI(APIView):
+#     def post(self, request):
