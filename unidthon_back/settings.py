@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'unid-14-front.vercel.app'
+    'unid-14-front.vercel.app',
+    'unidthon-back.herokuapp.com'
 ]
 
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'account',
 
 ]
 
@@ -127,6 +129,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+AUTH_USER_MODEL = 'account.User'
 
 #CORS ORIGIN 설정
 
