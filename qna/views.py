@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 
-from .models import Category, Question
+from .models import Category, Question, Diary, Answer
 from .serializers import DiarySerializer
 
 
@@ -65,5 +65,14 @@ class AudioAPI(APIView):
         else:
             raise exceptions.ParseError("Not Created")
 
-# class ImageAPI(APIView):
-#     def post(self, request):
+class ImageAPI(APIView):
+    def post(self, request):
+        user = request.user
+        answer_list = request.data['answers']
+        for answer in answer_list:
+            Diary.objects.create(user=user,
+                                 type='image',
+                                 answer=Answer.objects.get(pk=answer))
+        return Response(dict(result='Success'))
+
+
