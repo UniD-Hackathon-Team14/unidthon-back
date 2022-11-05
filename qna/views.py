@@ -3,7 +3,10 @@ import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
+
 from .models import Category, Question
+from .serializers import DiarySerializer
+
 
 class CategoryAPI(APIView):
     def get(self, request, **kwargs):
@@ -49,3 +52,13 @@ class QuestionAPI(APIView):
             raise exceptions.ParseError("All question answered")
 
 
+class AudioAPI(APIView):
+    def post(self, request):
+        data = request.data
+        data['type'] = 'audio'
+        serializer = DiarySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(dict(result='Success'))
+        else:
+            raise exceptions.ParseError("Not Created")
