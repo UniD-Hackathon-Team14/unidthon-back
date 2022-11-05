@@ -1,9 +1,11 @@
 import random
 
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 
+from account.models import User
 from .models import Category, Question, Diary, Answer
 from .serializers import DiarySerializer
 
@@ -76,8 +78,9 @@ class ImageAPI(APIView):
         return Response(dict(result='Success'))
 
 class HistoryAPI(APIView):
+    @csrf_exempt
     def get(self, request):
-        user = request.user
+        user = User.objects.get(pk=1)
         category = request.GET.get("category")
         type = request.GET.get("type")
         # 카테고리가 있는 경우
