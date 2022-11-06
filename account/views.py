@@ -40,7 +40,7 @@ class RegisterAPI(APIView):
         user = User.objects.create(username=data["username"], nickname=data["nickname"])
         user.set_password(data["password"])
         user.save()
-        return Response(dict(user=user.pk), status=status.HTTP_204_NO_CONTENT)
+        return Response(dict(user=user.pk))
 
 class CheckUsernameAPI(APIView):
     @csrf_exempt
